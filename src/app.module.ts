@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
-import { join } from 'path';
 dotenv.config();
 
 @Module({
@@ -23,9 +22,9 @@ dotenv.config();
     GraphQLModule.forRoot({
       driver: ApolloDriver,
       playground: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql')
+      autoSchemaFile: true
     }),
-    UserModule
+    UserModule,
   ],
   controllers: [],
   providers: [],
