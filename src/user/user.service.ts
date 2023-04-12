@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as crypto from 'crypto';
+import { DeleteUserInput } from './dto/delete-user.input';
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,6 @@ export class UserService {
   ) {}
 
   async create(createUserInput: CreateUserInput): Promise<User> {
-
     const obj = {
       algorithm: 'aes-256-cbc',
       ivLength: 16,
@@ -31,9 +31,29 @@ export class UserService {
     const fordecryption = await this.decryptingPassword(forencryption, obj);
     const user = this.userRepository.create({
       email: createUserInput.email,
-      password: fordecryption,
+      password: forencryption,
     });
     return this.userRepository.save(user);
+  }
+
+  async update(createUserInput: CreateUserInput): Promise<User> {
+    const updateUser = await this.userRepository.findOne({
+      where: { email: createUserInput.email },
+    });
+    createUserInput.password = updateUser.password;
+    createUserInput.email = updateUser.email;
+    const updatedUser = await this.userRepository.save(updateUser);
+    console.log('updatedUser------------------', updatedUser)
+    return updatedUser;
+  }
+
+  async delete(deleteUserInput: DeleteUserInput): Promise<String> {
+    const deleteUser = await this.userRepository.findOne({
+      where: { email : deleteUserInput.email },
+    });
+    const deletedUser = await this.userRepository.remove(deleteUser);
+    console.log('deletedUser------------------', deletedUser)
+    return "User deleted successfully";
   }
 
   private async encryptingPassword(password: string, obj): Promise<string> {

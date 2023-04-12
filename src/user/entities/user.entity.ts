@@ -4,27 +4,27 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @ObjectType()
 @Entity()
 export class User {
-  @Field(() => Int)
+  @Field(() => Int,{nullable: true})
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field()
+  @Field({nullable: true})
   @Column()
   email: string;
 
-  @Field()
+  @Field({nullable: true})
   @Column()
   password: string;
 
-  @Field()
+  @Field({nullable: true})
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field()
+  @Field({nullable: true})
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Field()
+  @Field({nullable: true})
   @DeleteDateColumn()
   deletedAt: Date;
 
